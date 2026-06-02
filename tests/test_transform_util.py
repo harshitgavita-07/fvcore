@@ -11,6 +11,7 @@ from fvcore.transforms.transform_util import to_float_tensor, to_numpy
 class TestTransformUtil(unittest.TestCase):
     def test_convert(self) -> None:
         N, C, H, W = 4, 64, 14, 14
+        # pyrefly: ignore [bad-argument-type]
         np.random.seed(0)
         # pyre-fixme[24]: Generic type `np.ndarray` expects 2 type parameters.
         array_HW: np.ndarray = np.random.rand(H, W)

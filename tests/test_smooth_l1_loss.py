@@ -12,6 +12,7 @@ from fvcore.nn import smooth_l1_loss
 class TestSmoothL1Loss(unittest.TestCase):
     def setUp(self) -> None:
         super().setUp()
+        # pyrefly: ignore [bad-argument-type]
         np.random.seed(42)
 
     def test_smooth_l1_loss(self) -> None:

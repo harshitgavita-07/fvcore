@@ -192,6 +192,7 @@ class MultiStepParamScheduler(ParamScheduler):
         if milestones is None:
             # Default equispaced drop_epochs behavior
             milestones = []
+            # pyrefly: ignore [unsupported-operation]
             step_width = math.ceil(num_updates / float(len(values)))
             for idx in range(len(values) - 1):
                 milestones.append(step_width * (idx + 1))
