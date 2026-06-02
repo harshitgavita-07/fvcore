@@ -68,7 +68,6 @@ class TestPreciseBN(unittest.TestCase):
             )
             # pyre-fixme[16]: Optional type has no attribute `numpy`.
             self.assertTrue(np.allclose(model.running_mean.numpy(), mean))
-            # pyrefly: ignore [missing-attribute]
             self.assertTrue(np.allclose(model.running_var.numpy(), var))
 
             # Test that the new estimator can handle varying batch size
@@ -80,9 +79,7 @@ class TestPreciseBN(unittest.TestCase):
                 itertools.cycle(tensors),
                 len(tensors),
             )
-            # pyrefly: ignore [missing-attribute]
             self.assertTrue(np.allclose(model.running_mean.numpy(), mean))
-            # pyrefly: ignore [missing-attribute]
             self.assertTrue(np.allclose(model.running_var.numpy(), var))
             self.assertTrue(np.allclose(model.weight.detach().numpy(), old_weight))
 

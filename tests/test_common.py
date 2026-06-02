@@ -18,7 +18,6 @@ from yaml.constructor import ConstructorError
 class TestHistoryBuffer(unittest.TestCase):
     def setUp(self) -> None:
         super().setUp()
-        # pyrefly: ignore [bad-argument-type]
         np.random.seed(42)
 
     @staticmethod

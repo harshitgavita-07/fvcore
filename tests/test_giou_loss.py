@@ -12,7 +12,6 @@ from fvcore.nn import giou_loss
 class TestGIoULoss(unittest.TestCase):
     def setUp(self) -> None:
         super().setUp()
-        # pyrefly: ignore [bad-argument-type]
         np.random.seed(42)
 
     def test_giou_loss(self) -> None:

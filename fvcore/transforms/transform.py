@@ -54,7 +54,6 @@ class Transform(metaclass=ABCMeta):
         """
 
         if params:
-            # pyrefly: ignore [missing-attribute]
             for k, v in params.items():
                 if k != "self" and not k.startswith("_"):
                     setattr(self, k, v)
@@ -101,7 +100,6 @@ class Transform(metaclass=ABCMeta):
         Returns:
             ndarray: segmentation after apply the transformation.
         """
-        # pyrefly: ignore [bad-return]
         return self.apply_image(segmentation)
 
     def apply_box(self, box: np.ndarray) -> np.ndarray:
@@ -128,7 +126,6 @@ class Transform(metaclass=ABCMeta):
         # ([x0, y0], [x1, y0], [x0, y1], [x1, y1]).
         idxs = np.array([(0, 1), (2, 1), (0, 3), (2, 3)]).flatten()
         coords = np.asarray(box).reshape(-1, 4)[:, idxs].reshape(-1, 2)
-        # pyrefly: ignore [missing-attribute]
         coords = self.apply_coords(coords).reshape((-1, 4, 2))
         minxy = coords.min(axis=1)
         maxxy = coords.max(axis=1)
@@ -329,7 +326,6 @@ class TransformList(Transform):
             TransformList: list of transforms.
         """
         others = other.transforms if isinstance(other, TransformList) else [other]
-        # pyrefly: ignore [bad-argument-type]
         return TransformList(others + self.transforms)
 
     def __len__(self) -> int:
@@ -356,11 +352,9 @@ class TransformList(Transform):
 
     # The actual implementations are provided in __getattribute__.
     # But abstract methods need to be declared here.
-    # pyrefly: ignore [bad-override-param-name]
     def apply_coords(self, x):
         raise NotImplementedError
 
-    # pyrefly: ignore [bad-override-param-name]
     def apply_image(self, x):
         raise NotImplementedError
 
@@ -372,10 +366,8 @@ class HFlipTransform(Transform):
 
     def __init__(self, width: int):
         super().__init__()
-        # pyrefly: ignore [bad-argument-type]
         self._set_attributes(locals())
 
-    # pyrefly: ignore [bad-override]
     def apply_image(self, img: np.ndarray) -> np.ndarray:
         """
         Flip the image(s).
@@ -394,7 +386,6 @@ class HFlipTransform(Transform):
         else:
             return np.flip(img, axis=-2)
 
-    # pyrefly: ignore [bad-override]
     def apply_coords(self, coords: np.ndarray) -> np.ndarray:
         """
         Flip the coordinates.
@@ -410,7 +401,6 @@ class HFlipTransform(Transform):
             Therefore they are flipped by `(W - x, H - y)`, not
             `(W - 1 - x, H - 1 - y)`.
         """
-        # pyrefly: ignore [missing-attribute]
         coords[:, 0] = self.width - coords[:, 0]
         return coords
 
@@ -428,10 +418,8 @@ class VFlipTransform(Transform):
 
     def __init__(self, height: int):
         super().__init__()
-        # pyrefly: ignore [bad-argument-type]
         self._set_attributes(locals())
 
-    # pyrefly: ignore [bad-override]
     def apply_image(self, img: np.ndarray) -> np.ndarray:
         """
         Flip the image(s).
@@ -452,7 +440,6 @@ class VFlipTransform(Transform):
             tensor = tensor.flip((-3))
         return tensor.numpy()
 
-    # pyrefly: ignore [bad-override]
     def apply_coords(self, coords: np.ndarray) -> np.ndarray:
         """
         Flip the coordinates.
@@ -468,7 +455,6 @@ class VFlipTransform(Transform):
             Therefore they are flipped by `(W - x, H - y)`, not
             `(W - 1 - x, H - 1 - y)`.
         """
-        # pyrefly: ignore [missing-attribute]
         coords[:, 1] = self.height - coords[:, 1]
         return coords
 
@@ -487,11 +473,9 @@ class NoOpTransform(Transform):
     def __init__(self):
         super().__init__()
 
-    # pyrefly: ignore [bad-override]
     def apply_image(self, img: np.ndarray) -> np.ndarray:
         return img
 
-    # pyrefly: ignore [bad-override]
     def apply_coords(self, coords: np.ndarray) -> np.ndarray:
         return coords
 
@@ -509,7 +493,6 @@ class ScaleTransform(Transform):
     Resize the image to a target size.
     """
 
-    # pyrefly: ignore [bad-function-definition]
     def __init__(self, h: int, w: int, new_h: int, new_w: int, interp: str = None):
         """
         Args:
@@ -521,10 +504,8 @@ class ScaleTransform(Transform):
                 https://pytorch.org/docs/stable/nn.functional.html
         """
         super().__init__()
-        # pyrefly: ignore [bad-argument-type]
         self._set_attributes(locals())
 
-    # pyrefly: ignore [bad-function-definition, bad-override]
     def apply_image(self, img: np.ndarray, interp: str = None) -> np.ndarray:
         """
         Resize the image(s).
@@ -546,14 +527,10 @@ class ScaleTransform(Transform):
         elif len(img.shape) in (2, 3):
             h, w = img.shape[:2]
         else:
-            # pyrefly: ignore [bad-raise]
             raise ("Unsupported input with shape of {}".format(img.shape))
-        # pyrefly: ignore [missing-attribute]
         assert self.h == h and self.w == w, (
-            # pyrefly: ignore [missing-attribute]
             "Input size mismatch h w {}:{} -> {}:{}".format(self.h, self.w, h, w)
         )
-        # pyrefly: ignore [missing-attribute]
         interp_method = interp if interp is not None else self.interp
         # Option of align_corners is only supported for linear, bilinear,
         # and bicubic.
@@ -566,15 +543,12 @@ class ScaleTransform(Transform):
         # support it https://github.com/pytorch/pytorch/issues/5580
         float_tensor = torch.nn.functional.interpolate(
             to_float_tensor(img),
-            # pyrefly: ignore [missing-attribute]
             size=(self.new_h, self.new_w),
             mode=interp_method,
             align_corners=align_corners,
         )
-        # pyrefly: ignore [bad-argument-type]
         return to_numpy(float_tensor, img.shape, img.dtype)
 
-    # pyrefly: ignore [bad-override]
     def apply_coords(self, coords: np.ndarray) -> np.ndarray:
         """
         Compute the coordinates after resize.
@@ -585,9 +559,7 @@ class ScaleTransform(Transform):
         Returns:
             ndarray: resized coordinates.
         """
-        # pyrefly: ignore [missing-attribute]
         coords[:, 0] = coords[:, 0] * (self.new_w * 1.0 / self.w)
-        # pyrefly: ignore [missing-attribute]
         coords[:, 1] = coords[:, 1] * (self.new_h * 1.0 / self.h)
         return coords
 
@@ -608,7 +580,6 @@ class ScaleTransform(Transform):
         """
         The inverse is to resize it back.
         """
-        # pyrefly: ignore [missing-attribute]
         return ScaleTransform(self.new_h, self.new_w, self.h, self.w, self.interp)
 
 
@@ -624,10 +595,8 @@ class GridSampleTransform(Transform):
                 `bilinear`.
         """
         super().__init__()
-        # pyrefly: ignore [bad-argument-type]
         self._set_attributes(locals())
 
-    # pyrefly: ignore [bad-function-definition, bad-override]
     def apply_image(self, img: np.ndarray, interp: str = None) -> np.ndarray:
         """
         Apply grid sampling on the image(s).
@@ -641,17 +610,14 @@ class GridSampleTransform(Transform):
         Returns:
             ndarray: grid sampled image(s).
         """
-        # pyrefly: ignore [missing-attribute]
         interp_method = interp if interp is not None else self.interp
         float_tensor = torch.nn.functional.grid_sample(
             to_float_tensor(img),  # NxHxWxC -> NxCxHxW.
-            # pyrefly: ignore [missing-attribute]
             torch.from_numpy(self.grid),
             mode=interp_method,
             padding_mode="border",
             align_corners=False,
         )
-        # pyrefly: ignore [bad-argument-type]
         return to_numpy(float_tensor, img.shape, img.dtype)
 
     def apply_coords(self, coords: np.ndarray):
@@ -691,10 +657,8 @@ class CropTransform(Transform):
                 before cropping. Needed to make this transform invertible.
         """
         super().__init__()
-        # pyrefly: ignore [bad-argument-type]
         self._set_attributes(locals())
 
-    # pyrefly: ignore [bad-override]
     def apply_image(self, img: np.ndarray) -> np.ndarray:
         """
         Crop the image(s).
@@ -707,13 +671,10 @@ class CropTransform(Transform):
             ndarray: cropped image(s).
         """
         if len(img.shape) <= 3:
-            # pyrefly: ignore [missing-attribute]
             return img[self.y0 : self.y0 + self.h, self.x0 : self.x0 + self.w]
         else:
-            # pyrefly: ignore [missing-attribute]
             return img[..., self.y0 : self.y0 + self.h, self.x0 : self.x0 + self.w, :]
 
-    # pyrefly: ignore [bad-override]
     def apply_coords(self, coords: np.ndarray) -> np.ndarray:
         """
         Apply crop transform on coordinates.
@@ -724,9 +685,7 @@ class CropTransform(Transform):
         Returns:
             ndarray: cropped coordinates.
         """
-        # pyrefly: ignore [missing-attribute]
         coords[:, 0] -= self.x0
-        # pyrefly: ignore [missing-attribute]
         coords[:, 1] -= self.y0
         return coords
 
@@ -746,14 +705,7 @@ class CropTransform(Transform):
 
         # Create a window that will be used to crop
         crop_box = geometry.box(
-            # pyrefly: ignore [missing-attribute]
-            self.x0,
-            # pyrefly: ignore [missing-attribute]
-            self.y0,
-            # pyrefly: ignore [missing-attribute]
-            self.x0 + self.w,
-            # pyrefly: ignore [missing-attribute]
-            self.y0 + self.h,
+            self.x0, self.y0, self.x0 + self.w, self.y0 + self.h
         ).buffer(0.0)
 
         cropped_polygons = []
@@ -771,13 +723,11 @@ class CropTransform(Transform):
             else:
                 cropped = [cropped]
             # one polygon may be cropped to multiple ones
-            # pyrefly: ignore [not-iterable]
             for poly in cropped:
                 # It could produce lower dimensional objects like lines or
                 # points, which we want to ignore
                 if not isinstance(poly, geometry.Polygon) or not poly.is_valid:
                     continue
-                # pyrefly: ignore [missing-attribute]
                 coords = np.asarray(poly.exterior.coords)
                 # NOTE This process will produce an extra identical vertex at
                 # the end. So we remove it. This is tested by
@@ -786,25 +736,13 @@ class CropTransform(Transform):
         return [self.apply_coords(p) for p in cropped_polygons]
 
     def inverse(self) -> Transform:
-        # pyrefly: ignore [missing-attribute]
         assert self.orig_w is not None and self.orig_h is not None, (
             "orig_w, orig_h are required for CropTransform to be invertible!"
         )
-        # pyrefly: ignore [missing-attribute]
         pad_x1 = self.orig_w - self.x0 - self.w
-        # pyrefly: ignore [missing-attribute]
         pad_y1 = self.orig_h - self.y0 - self.h
         return PadTransform(
-            # pyrefly: ignore [missing-attribute]
-            self.x0,
-            # pyrefly: ignore [missing-attribute]
-            self.y0,
-            pad_x1,
-            pad_y1,
-            # pyrefly: ignore [missing-attribute]
-            orig_w=self.w,
-            # pyrefly: ignore [missing-attribute]
-            orig_h=self.h,
+            self.x0, self.y0, pad_x1, pad_y1, orig_w=self.w, orig_h=self.h
         )
 
 
@@ -830,7 +768,6 @@ class PadTransform(Transform):
             seg_pad_value: the padding value to the segmentation mask
         """
         super().__init__()
-        # pyrefly: ignore [bad-argument-type]
         self._set_attributes(locals())
 
     def apply_image(self, img):
@@ -845,7 +782,6 @@ class PadTransform(Transform):
             constant_values=self.pad_value,
         )
 
-    # pyrefly: ignore [bad-override-param-name]
     def apply_segmentation(self, img):
         if img.ndim == 3:
             padding = ((self.y0, self.y1), (self.x0, self.x1), (0, 0))
@@ -864,25 +800,13 @@ class PadTransform(Transform):
         return coords
 
     def inverse(self) -> Transform:
-        # pyrefly: ignore [missing-attribute]
         assert self.orig_w is not None and self.orig_h is not None, (
             "orig_w, orig_h are required for PadTransform to be invertible!"
         )
-        # pyrefly: ignore [missing-attribute]
         neww = self.orig_w + self.x0 + self.x1
-        # pyrefly: ignore [missing-attribute]
         newh = self.orig_h + self.y0 + self.y1
         return CropTransform(
-            # pyrefly: ignore [bad-argument-type, missing-attribute]
-            self.x0,
-            # pyrefly: ignore [missing-attribute]
-            self.y0,
-            # pyrefly: ignore [bad-argument-type]
-            self.orig_w,
-            # pyrefly: ignore [bad-argument-type]
-            self.orig_h,
-            orig_w=neww,
-            orig_h=newh,
+            self.x0, self.y0, self.orig_w, self.orig_h, orig_w=neww, orig_h=newh
         )
 
 
@@ -904,10 +828,8 @@ class BlendTransform(Transform):
             dst_weight (float): Blend weighting of dst_image
         """
         super().__init__()
-        # pyrefly: ignore [bad-argument-type]
         self._set_attributes(locals())
 
-    # pyrefly: ignore [bad-function-definition, bad-override]
     def apply_image(self, img: np.ndarray, interp: str = None) -> np.ndarray:
         """
         Apply blend transform on the image(s).
@@ -923,14 +845,11 @@ class BlendTransform(Transform):
         """
         if img.dtype == np.uint8:
             img = img.astype(np.float32)
-            # pyrefly: ignore [missing-attribute]
             img = self.src_weight * self.src_image + self.dst_weight * img
             return np.clip(img, 0, 255).astype(np.uint8)
         else:
-            # pyrefly: ignore [missing-attribute]
             return self.src_weight * self.src_image + self.dst_weight * img
 
-    # pyrefly: ignore [bad-override]
     def apply_coords(self, coords: np.ndarray) -> np.ndarray:
         """
         Apply no transform on the coordinates.

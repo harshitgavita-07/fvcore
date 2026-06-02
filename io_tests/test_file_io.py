@@ -39,7 +39,6 @@ class TestNativeIO(unittest.TestCase):
 
     def test_open_args(self) -> None:
         PathManager.set_strict_kwargs_checking(True)
-        # pyrefly: ignore [no-matching-overload]
         f = PathManager.open(
             self._tmpfile,  # type: ignore
             mode="r",

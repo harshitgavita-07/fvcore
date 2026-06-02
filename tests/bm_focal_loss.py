@@ -21,14 +21,9 @@ def bm_focal_loss() -> None:
         {"N": 10000, "alpha": 0},
     ]
     benchmark(
-        # pyrefly: ignore [bad-argument-type]
-        TestFocalLoss.focal_loss_with_init,
-        "Focal_loss",
-        kwargs_list,
-        warmup_iters=1,
+        TestFocalLoss.focal_loss_with_init, "Focal_loss", kwargs_list, warmup_iters=1
     )
     benchmark(
-        # pyrefly: ignore [bad-argument-type]
         TestFocalLoss.focal_loss_jit_with_init,
         "Focal_loss_JIT",
         kwargs_list,
@@ -50,14 +45,12 @@ def bm_focal_loss_star() -> None:
         {"N": 10000, "alpha": 0},
     ]
     benchmark(
-        # pyrefly: ignore [bad-argument-type]
         TestFocalLossStar.focal_loss_star_with_init,
         "Focal_loss_star",
         kwargs_list,
         warmup_iters=1,
     )
     benchmark(
-        # pyrefly: ignore [bad-argument-type]
         TestFocalLossStar.focal_loss_star_jit_with_init,
         "Focal_loss_star_JIT",
         kwargs_list,

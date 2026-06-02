@@ -15,7 +15,6 @@ def bm_history_buffer_update() -> None:
         {"num_values": 1000000},
     ]
     benchmark(
-        # pyrefly: ignore [bad-argument-type]
         TestHistoryBuffer.create_buffer_with_init,
         "BM_UPDATE",
         kwargs_list,

@@ -114,7 +114,6 @@ def parameter_count_table(model: nn.Module, max_depth: int = 3) -> str:
     fill(0, "")
 
     old_ws = tabulate.PRESERVE_WHITESPACE
-    # pyrefly: ignore [bad-assignment]
     tabulate.PRESERVE_WHITESPACE = True
     tab = tabulate.tabulate(
         table, headers=["name", "#elements or shape"], tablefmt="pipe"

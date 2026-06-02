@@ -78,7 +78,6 @@ class TestCheckpointer(unittest.TestCase):
         return m, state_dict
 
     @unittest.skipIf(  # pyre-fixme[56]
-        # pyrefly: ignore [unbound-name]
         (not hasattr(quantization, "ObserverBase"))
         or (not hasattr(quantization, "FakeQuantizeBase")),
         "quantization per-channel observer base classes not supported",

@@ -299,12 +299,10 @@ def _get_input_sizes(iterable: Iterable[Any]) -> List[Any]:  # pyre-ignore[2,3]
         elif isinstance(i, Iterable):
             sublist_sizes = _get_input_sizes(i)
             if all(j is None for j in sublist_sizes):
-                # pyrefly: ignore [bad-argument-type]
                 out_list.append(None)
             else:
                 out_list.append(sublist_sizes)
         else:
-            # pyrefly: ignore [bad-argument-type]
             out_list.append(None)
     return out_list
 
@@ -514,12 +512,9 @@ def _model_stats_table(
         str : The formatted table.
     """
     if stat_columns is None:
-        # pyrefly: ignore [bad-assignment]
         stat_columns = set()
         for stats in statistics.values():
-            # pyrefly: ignore [missing-attribute]
             stat_columns.update(stats.keys())
-        # pyrefly: ignore [bad-argument-type]
         stat_columns = list(stat_columns)
 
     headers = ["module"] + stat_columns
@@ -561,7 +556,6 @@ def _model_stats_table(
     fill(indent_lvl=1, prefix=root_prefix)
 
     old_ws = tabulate.PRESERVE_WHITESPACE
-    # pyrefly: ignore [bad-assignment]
     tabulate.PRESERVE_WHITESPACE = True
     tab = tabulate.tabulate(table, headers=headers, tablefmt="pipe")
     tabulate.PRESERVE_WHITESPACE = old_ws

@@ -19,7 +19,6 @@ class _AllReduce(Function):
         return torch.sum(inputs, dim=0)
 
     @staticmethod
-    # pyrefly: ignore [bad-override]
     def backward(ctx, grad_output: torch.Tensor) -> torch.Tensor:
         dist.all_reduce(grad_output, async_op=False)
         return grad_output
