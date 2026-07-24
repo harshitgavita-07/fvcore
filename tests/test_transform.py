@@ -198,14 +198,17 @@ class TestTransforms(unittest.TestCase):
         float_tensor = to_float_tensor(imgs)
         if interp == "nearest":
             if float_tensor.dim() == 3:
+                # pyrefly: ignore [missing-argument]
                 float_tensor = torch._C._nn.upsample_nearest1d(
                     float_tensor, (new_h, new_w)
                 )
             elif float_tensor.dim() == 4:
+                # pyrefly: ignore [missing-argument]
                 float_tensor = torch._C._nn.upsample_nearest2d(
                     float_tensor, (new_h, new_w)
                 )
             elif float_tensor.dim() == 5:
+                # pyrefly: ignore [missing-argument]
                 float_tensor = torch._C._nn.upsample_nearest3d(
                     float_tensor, (new_h, new_w)
                 )
@@ -213,6 +216,7 @@ class TestTransforms(unittest.TestCase):
                 return None, None
         elif interp == "bilinear":
             if float_tensor.dim() == 4:
+                # pyrefly: ignore [missing-argument]
                 float_tensor = torch._C._nn.upsample_bilinear2d(
                     float_tensor, (new_h, new_w), False
                 )
@@ -222,6 +226,7 @@ class TestTransforms(unittest.TestCase):
         return numpy_tensor, numpy_tensor.shape
 
     @staticmethod
+    # pyrefly: ignore [bad-return]
     def _seg_provider(n: int = 8, h: int = 10, w: int = 10) -> np.ndarray:
         """
         Provide different segmentations as test cases.
@@ -237,7 +242,11 @@ class TestTransforms(unittest.TestCase):
 
     @staticmethod
     def _img_provider(
-        n: int = 8, c: int = 3, h: int = 10, w: int = 10
+        n: int = 8,
+        c: int = 3,
+        h: int = 10,
+        w: int = 10,
+        # pyrefly: ignore [bad-return]
     ) -> Tuple[np.ndarray, type, str]:
         """
         Provide different image inputs as test cases.
@@ -589,6 +598,7 @@ class TestTransforms(unittest.TestCase):
         h_min: int = 0,
         w_max: int = 10,
         w_min: int = 0,
+        # pyrefly: ignore [bad-return]
     ) -> Tuple[np.ndarray, type, str]:
         """
         Provide different coordinate inputs as test cases.
@@ -966,6 +976,7 @@ class TestTransforms(unittest.TestCase):
             align_corners=None,
         )
         numpy_tensor = to_numpy(float_tensor, seg.shape, seg.dtype)
+        # pyrefly: ignore [bad-return]
         return numpy_tensor, numpy_tensor.shape
 
     def test_scale_seg_transforms(self):
