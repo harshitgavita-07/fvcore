@@ -64,8 +64,6 @@ class TestWeightInit(unittest.TestCase):
                     "in_channels": c_in_dim,
                     "out_channels": c_out_dim,
                 }
-                # pyre-fixme[6]: For 1st argument expected `bool` but got `int`.
-                # pyre-fixme[6]: For 1st argument expected `str` but got `int`.
                 model = layer(**p)
 
                 if layer is nn.Conv1d:
@@ -78,7 +76,6 @@ class TestWeightInit(unittest.TestCase):
                 # Calculate fan_in and fan_out.
                 # pyre-fixme[61]: `spatial_dim` is undefined, or not always defined.
                 fan_in = c_in_dim * spatial_dim
-                # pyre-fixme[61]: `spatial_dim` is undefined, or not always defined.
                 fan_out = c_out_dim * spatial_dim
 
                 # Msra weight init check.
@@ -119,7 +116,6 @@ class TestWeightInit(unittest.TestCase):
                 channel_in_dims, channel_out_dims
             ):
                 p = {"in_features": c_in_dim, "out_features": c_out_dim}
-                # pyre-fixme[6]: For 1st argument expected `bool` but got `int`.
                 model = layer(**p)
 
                 # Calculate fan_in and fan_out.

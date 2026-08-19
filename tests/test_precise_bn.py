@@ -21,7 +21,6 @@ class TestPreciseBN(unittest.TestCase):
     def compute_bn_stats(
         tensors: List[torch.Tensor],
         dims: List[int],
-        # pyre-fixme[24]: Generic type `np.ndarray` expects 2 type parameters.
     ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
         """
         Given a list of random initialized tensors, compute the mean and

@@ -55,14 +55,11 @@ class TestCheckpointer(unittest.TestCase):
         Create a complex model.
         """
         m = nn.Module()
-        # pyre-fixme[16]: `Module` has no attribute `block1`.
         m.block1 = nn.Module()
         # pyre-fixme[16]: `Module` has no attribute `layer1`.
         # pyre-fixme[16]: `Tensor` has no attribute `layer1`.
         m.block1.layer1 = nn.Linear(2, 3)
-        # pyre-fixme[16]: `Module` has no attribute `layer2`.
         m.layer2 = nn.Linear(3, 2)
-        # pyre-fixme[16]: `Module` has no attribute `res`.
         m.res = nn.Module()
         # pyre-fixme[16]: `Tensor` has no attribute `layer2`.
         m.res.layer2 = nn.Linear(3, 2)
@@ -77,7 +74,7 @@ class TestCheckpointer(unittest.TestCase):
 
         return m, state_dict
 
-    @unittest.skipIf(  # pyre-fixme[56]
+    @unittest.skipIf(
         # pyrefly: ignore [unbound-name]
         (not hasattr(quantization, "ObserverBase"))
         or (not hasattr(quantization, "FakeQuantizeBase")),
@@ -268,14 +265,11 @@ class TestCheckpointer(unittest.TestCase):
         incompatible = chkpt._load_model(data)
         chkpt._log_incompatible_keys(incompatible)
         self.assertTrue(
-            # pyre-fixme[6]: For 1st argument expected `Tensor` but got `float`.
             torch.allclose(new_model.y.bias - 5.0, torch.zeros_like(new_model.y.bias))
         )
         logger.info.assert_not_called()
 
-    @unittest.skipIf(  # pyre-fixme[56]
-        not hasattr(nn, "LazyLinear"), "LazyModule not supported"
-    )
+    @unittest.skipIf(not hasattr(nn, "LazyLinear"), "LazyModule not supported")
     def test_load_lazy_module(self) -> None:
         def _get_model() -> nn.Sequential:
             return nn.Sequential(nn.LazyLinear(10))
