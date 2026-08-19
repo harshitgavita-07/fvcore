@@ -310,10 +310,7 @@ def _get_input_sizes(iterable: Iterable[Any]) -> List[Any]:  # pyre-ignore[2,3]
 
 
 def flop_count_str(
-    # pyre-fixme[11]: Annotation `FlopCountAnalysis` is not defined as a type.
-    # pyre-fixme[11]: Annotation `ActivationCountAnalysis` is not defined as a type.
     flops: FlopCountAnalysis,
-    # pyre-fixme[11]: Annotation `ActivationCountAnalysis` is not defined as a type.
     activations: Optional[ActivationCountAnalysis] = None,
 ) -> str:
     """
@@ -528,12 +525,11 @@ def _model_stats_table(
     def build_row(name: str, stats: Dict[str, str], indent_lvl: int) -> List[str]:
         indent = " " * indent_lvl
         row = [indent + name]
-        for stat_name in stat_columns:  # pyre-ignore[16] Is not None at this point
+        for stat_name in stat_columns:
             row_str = (indent + stats[stat_name]) if stat_name in stats else ""
             row.append(row_str)
         return row
 
-    # pyre-fixme[53]: Captured variable `root_prefix` is not annotated.
     def fill(indent_lvl: int, prefix: str) -> None:
         if indent_lvl > max_depth:
             return

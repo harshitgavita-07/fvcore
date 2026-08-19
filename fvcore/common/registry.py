@@ -88,5 +88,4 @@ class Registry(Iterable[Tuple[str, Any]]):
     def __iter__(self) -> Iterator[Tuple[str, Any]]:
         return iter(self._obj_map.items())
 
-    # pyre-fixme[4]: Attribute must be annotated.
     __str__ = __repr__

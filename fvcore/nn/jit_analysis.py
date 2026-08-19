@@ -314,7 +314,7 @@ class JitModelAnalysis:
                 "Analysis results should be computed before calling unsupported_ops()"
             )
         module_name = self.canonical_module_name(module_name)
-        return self._stats.unsupported_ops[module_name]  # pyre-fixme
+        return self._stats.unsupported_ops[module_name]
 
     def uncalled_modules(self) -> Set[str]:
         """

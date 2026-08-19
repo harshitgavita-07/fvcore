@@ -873,7 +873,7 @@ class PadTransform(Transform):
         # pyrefly: ignore [missing-attribute]
         newh = self.orig_h + self.y0 + self.y1
         return CropTransform(
-            # pyrefly: ignore [bad-argument-type, missing-attribute]
+            # pyrefly: ignore [missing-attribute]
             self.x0,
             # pyrefly: ignore [missing-attribute]
             self.y0,
